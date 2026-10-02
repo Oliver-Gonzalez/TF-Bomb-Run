@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TF TOT Calculator</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f0f2f5;
+            color: #000000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 40px 20px;
+            position: relative;
+        }
+
+        /* ================= TOP RIGHT HAMBURGER NAVIGATION ================= */
+        .nav-menu-container {
+            position: fixed;
+            top: 20px;
+            right: 24px;
+            z-index: 2000;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        /* Scaled up for tablet touch */
+        .hamburger-btn {
+            width: 48px;
+            height: 48px;
+            background-color: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+            padding: 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            transition: all 0.18s ease-in-out;
+        }
+
+        .hamburger-btn:hover {
+            background-color: #f8fafc;
+            border-color: #1976d2;
+            box-shadow: 0 4px 14px rgba(25, 118, 210, 0.18);
+            transform: translateY(-1px);
+        }
+
+        .hamburger-btn span {
+            display: block;
+            width: 24px;
+            height: 2.5px;
+            background-color: #000000;
+            border-radius: 1px;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .hamburger-btn:hover span {
+            background-color: #1976d2;
+        }
+
+        /* Transform to 'X' when open */
+        .hamburger-btn.open span:nth-child(1) {
+            transform: translateY(8.5px) rotate(45deg);
+        }
+        .hamburger-btn.open span:nth-child(2) {
+            opacity: 0;
+        }
+        .hamburger-btn.open span:nth-child(3) {
+            transform: translateY(-8.5px) rotate(-45deg);
+        }
+
+        /* Dropdown Card */
+        .nav-dropdown {
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            width: 310px;
+            background: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 10px;
+            padding: 16px 14px;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            opacity: 0;
+            transform: translateY(-6px);
+            transition: opacity 0.18s ease, transform 0.18s ease;
+        }
+
+        .nav-dropdown.show {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .nav-dropdown-title {
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 1.2px;
+            color: #000000;
+            text-transform: uppercase;
+            padding: 2px 6px 8px;
+            border-bottom: 2px solid #000000;
+            margin-bottom: 4px;
+        }
+
+        .nav-section-label {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #64748b;
+            text-transform: uppercase;
+            padding: 6px 6px 2px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 11px 12px;
+            background-color: #ffffff;
+            color: #000000;
+            text-decoration: none;
+            font-size: 12.5px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            transition: all 0.15s ease-in-out;
+        }
+
+        .nav-item:hover {
+            background-color: #f8fafc;
+            border-color: #1976d2;
+            color: #1976d2;
+            transform: translateX(2px);
+        }
+
+        .nav-item-home {
+            border-color: #cbd5e1;
+            background-color: #f8fafc;
+        }
+
+        .nav-item-aux:hover {
+            border-color: #d97706;
+            color: #b45309;
+        }
+
+        .nav-arrow {
+            color: #94a3b8;
+            font-size: 14px;
+            transition: transform 0.15s ease, color 0.15s ease;
+        }
+
+        .nav-item:hover .nav-arrow {
+            color: #1976d2;
+            transform: translateX(3px);
+        }
+
+        .nav-item-aux:hover .nav-arrow {
+            color: #d97706;
+        }
+
+        .nav-divider {
+            height: 1px;
+            background-color: #e2e8f0;
+            margin: 5px 0;
+        }
+
+        @media print {
+            .nav-menu-container {
+                display: none !important;
+            }
+        }
+
+        /* ================= IPAD-EXPANDED MAIN CONTAINER ================= */
+        .container {
+            background-color: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 16px;
+            padding: 40px 36px;
+            width: 100%;
+            max-width: 860px; /* Matched to iPad aspect ratios */
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Header Banner */
+        .header-banner {
+            text-align: center;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #000000;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            color: #000000;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .subtitle-badge {
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            color: #1976d2;
+            text-transform: uppercase;
+        }
+
+        /* Large Touch-Optimized Input Grid */
+        .input-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+            margin-bottom: 22px;
+        }
+
+        @media (max-width: 600px) {
+            .input-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            .container {
+                padding: 24px 20px;
+            }
+            h1 {
+                font-size: 26px;
+            }
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-size: 13.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: #111827;
+            margin-bottom: 8px;
+        }
+
+        input[type="number"], input[type="text"] {
+            width: 100%;
+            padding: 14px 18px;
+            background-color: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 8px;
+            color: #000000;
+            font-size: 22px; /* Very clear and large on iPad */
+            font-weight: 700;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        input[type="number"]:focus, input[type="text"]:focus {
+            outline: none;
+            border-color: #1976d2;
+            box-shadow: 0 0 0 4px rgba(25, 118, 210, 0.18);
+        }
+
+        /* Large Action Buttons */
+        .btn-compute {
+            width: 100%;
+            padding: 16px 20px;
+            background-color: #000000;
+            color: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.15s ease-in-out;
+        }
+
+        .btn-compute:hover {
+            background-color: #262626;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+        }
+
+        .btn-compute:active {
+            transform: translateY(0);
+        }
+
+        .btn-clear {
+            width: 100%;
+            background: transparent;
+            border: 2px solid #000000;
+            color: #000000;
+            padding: 14px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13.5px;
+            font-weight: 700;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+            margin-top: 16px;
+            transition: all 0.15s ease-in-out;
+        }
+
+        .btn-clear:hover {
+            background-color: #f1f3f5;
+        }
+
+        /* High-Visibility Results Section */
+        .results-card {
+            background-color: #f8fafc;
+            border: 2px solid #000000;
+            border-radius: 12px;
+            padding: 28px 24px;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .results-header-tag {
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 1.2px;
+            color: #1976d2;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 18px;
+        }
+
+        @media (max-width: 600px) {
+            .stat-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .stat-box {
+            background: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 8px;
+            padding: 16px 18px;
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.6px;
+            color: #64748b;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .stat-value {
+            font-size: 34px;
+            font-weight: 800;
+            color: #000000;
+            letter-spacing: 0.5px;
+        }
+
+        .briefing-callout {
+            background-color: #ffffff;
+            border-left: 5px solid #1976d2;
+            border-top: 1.5px solid #000000;
+            border-right: 1.5px solid #000000;
+            border-bottom: 1.5px solid #000000;
+            border-radius: 6px;
+            padding: 16px 18px;
+            font-size: 15px;
+            line-height: 1.55;
+            color: #111827;
+        }
+
+        .briefing-callout strong {
+            color: #000000;
+        }
+
+        /* Error Message */
+        .error-message {
+            color: #b91c1c;
+            background-color: #fef2f2;
+            border: 2px solid #b91c1c;
+            padding: 14px 18px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            text-align: center;
+            margin-top: 20px;
+            display: none;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: #64748b;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-top: 24px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ================= TOP RIGHT HAMBURGER NAVIGATION ================= -->
+<nav class="nav-menu-container">
+    <button class="hamburger-btn" id="hamburgerBtn" aria-label="Toggle Portal Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    <div class="nav-dropdown" id="navDropdown">
+        <div class="nav-dropdown-title">UCT TOOLKIT PORTAL</div>
+        
+        <!-- Homepage Link -->
+        <a href="https://uct-toolkit.pages.dev/" class="nav-item nav-item-home">
+            <span>Home (UCT Toolkit)</span>
+            <span class="nav-arrow">&rarr;</span>
+        </a>
+
+        <div class="nav-divider"></div>
+        <div class="nav-section-label">BOLDFACE &amp; OPS-LIMITS</div>
+        
+        <!-- T-6A -->
+        <a href="https://t-6a-boldface.pages.dev/" class="nav-item">
+            <span>T-6A BOLDFACE &amp; OPS-LIMITS</span>
+            <span class="nav-arrow">&rarr;</span>
+        </a>
+
+        <!-- T-1A -->
+        <a href="https://t-1a-boldface.pages.dev/" class="nav-item">
+            <span>T-1A BOLDFACE &amp; OPS-LIMITS</span>
+            <span class="nav-arrow">&rarr;</span>
+        </a>
+
+        <!-- T-38C -->
+        <a href="https://t-38-boldface.pages.dev/" class="nav-item">
+            <span>T-38C BOLDFACE &amp; OPS-LIMITS (IFF)</span>
+            <span class="nav-arrow">&rarr;</span>
+        </a>
+
+        <div class="nav-divider"></div>
+        <div class="nav-section-label">AUX TOOLS</div>
+        
+        <!-- MCSTS Playtime Calculator -->
+        <a href="https://mcsts-playtime-calculator.pages.dev/" class="nav-item nav-item-aux">
+            <span>MCSTS PLAYTIME CALCULATOR</span>
+            <span class="nav-arrow">&rarr;</span>
+        </a>
+    </div>
+</nav>
+
+<div class="container">
+    <!-- Header Banner -->
+    <header class="header-banner">
+        <h1>TOT CALCULATOR</h1>
+        <span class="subtitle-badge">Full MOT / Target Run Timing Analyzer</span>
+    </header>
+
+    <form id="totForm" onsubmit="return false;">
+        <div class="input-grid">
+            <div class="form-group">
+                <label for="speed">Desired TGT GroundSpeed (Knots)</label>
+                <input type="number" id="speed" placeholder="Ex: 270" autocomplete="off" inputmode="numeric">
+            </div>
+            <div class="form-group">
+                <label for="tor">Distance From TGT @ Release (NM)</label>
+                <input type="number" id="tor" placeholder="Ex: 4" step="any" autocomplete="off" inputmode="decimal">
+            </div>
+        </div>
+
+        <div class="input-grid">
+            <div class="form-group">
+                <label for="distance">TGT Run Leg Distance (NM)</label>
+                <input type="number" id="distance" placeholder="Ex: 11.6" step="any" autocomplete="off" inputmode="decimal">
+            </div>
+            <div class="form-group">
+                <label for="ipTime">Initial IP Time (HH:MM:SS)</label>
+                <input type="text" id="ipTime" placeholder="Ex: 05:49:41" autocomplete="off">
+            </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 22px;">
+            <label for="tgtTime">Initial TOT (HH:MM:SS)</label>
+            <input type="text" id="tgtTime" placeholder="Ex: 05:52:00" autocomplete="off">
+        </div>
+
+        <button type="button" class="btn-compute" onclick="calculateTOT()">Compute Times</button>
+    </form>
+
+    <div class="error-message" id="errorDiv"></div>
+
+    <!-- Active Results Area -->
+    <div class="results-card" id="calcResults">
+        <div class="results-header-tag">COMPUTED TARGET TIMING</div>
+        
+        <div class="stat-grid">
+            <div class="stat-box">
+                <span class="stat-label">New IP Time</span>
+                <div class="stat-value" id="outIpTime">--:--:--</div>
+            </div>
+            <div class="stat-box">
+                <span class="stat-label">New TGT Time (Bottom Right)</span>
+                <div class="stat-value" id="outTgtTime">--:--:--</div>
+            </div>
+        </div>
+
+        <div class="briefing-callout" id="outputExcerpt"></div>
+    </div>
+
+    <button type="button" class="btn-clear" onclick="resetCalculator()">Clear Form</button>
+
+    <footer class="footer">
+        UCT STUDY &amp; MISSION PLANNING SUITE
+    </footer>
+</div>
+
+<script>
+    /* ================= TOP-RIGHT HAMBURGER TOGGLE ================= */
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const navDropdown = document.getElementById('navDropdown');
+
+    hamburgerBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = navDropdown.classList.contains('show');
+        if (isOpen) {
+            closeNavMenu();
+        } else {
+            openNavMenu();
+        }
+    });
+
+    function openNavMenu() {
+        navDropdown.classList.add('show');
+        hamburgerBtn.classList.add('open');
+    }
+
+    function closeNavMenu() {
+        navDropdown.classList.remove('show');
+        hamburgerBtn.classList.remove('open');
+    }
+
+    document.addEventListener('click', (e) => {
+        if (!navDropdown.contains(e.target) && !hamburgerBtn.contains(e.target)) {
+            closeNavMenu();
+        }
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            closeNavMenu();
+        }
+    });
+
+    /* ================= CALCULATOR ENGINE ================= */
+    function timeToSeconds(timeStr) {
+        if (!timeStr) return null;
+        const parts = timeStr.trim().split(":").map(Number);
+        if (parts.length !== 3 || parts.some(isNaN)) return null;
+        return parts[0]*3600 + parts[1]*60 + parts[2];
+    }
+
+    function secondsToTime(seconds) {
+        seconds = Math.round(seconds);
+        while (seconds < 0) seconds += 86400;
+        seconds = seconds % 86400;
+        let h = Math.floor(seconds / 3600);
+        let m = Math.floor((seconds % 3600) / 60);
+        let s = seconds % 60;
+        return String(h).padStart(2, '0') + ":" + String(m).padStart(2, '0') + ":" + String(s).padStart(2, '0');
+    }
+
+    function calculateTOT() {
+        const errorDiv = document.getElementById('errorDiv');
+        const calcResults = document.getElementById('calcResults');
+
+        errorDiv.style.display = 'none';
+        calcResults.style.display = 'none';
+
+        const speed = parseFloat(document.getElementById("speed").value);
+        const distance = parseFloat(document.getElementById("distance").value);
+        const tor = parseFloat(document.getElementById("tor").value);
+        const tgtInput = document.getElementById("tgtTime").value;
+        const ipInput = document.getElementById("ipTime").value;
+
+        const tgtTimeSec = timeToSeconds(tgtInput);
+        const ipTimeSec = timeToSeconds(ipInput);
+
+        if (!speed || isNaN(distance) || isNaN(tor) || tgtTimeSec === null || ipTimeSec === null) {
+            showError("Please check all fields and ensure time format is strictly HH:MM:SS.");
+            return;
+        }
+
+        if (speed <= 0) {
+            showError("GroundSpeed must be greater than zero.");
+            return;
+        }
+
+        if (distance <= 0) {
+            showError("TGT run distance must be greater than zero.");
+            return;
+        }
+
+        const travelAdjustment = (3600 * (distance - tor)) / speed;
+        const legTimeSec = tgtTimeSec - ipTimeSec;
+        const newMotSec = ipTimeSec + legTimeSec - 30 - travelAdjustment;
+        const tgtRunTimeSec = (3600 * distance) / speed;
+        const newTgtTimeSec = newMotSec + tgtRunTimeSec;
+
+        const formattedNewMot = secondsToTime(newMotSec);
+        const formattedNewTgt = secondsToTime(newTgtTimeSec);
+
+        document.getElementById("outIpTime").textContent = formattedNewMot;
+        document.getElementById("outTgtTime").textContent = formattedNewTgt;
+
+        document.getElementById("outputExcerpt").innerHTML = 
+            `To hit TOT at <strong>${tor} NM</strong> from TGT (accounting for 30s TOF), your new IP time must be <strong>${formattedNewMot}</strong> flying <strong>${speed} GS</strong> on your TGT leg. The TGT time on the bottom right will show <strong>${formattedNewTgt}</strong>.`;
+
+        calcResults.style.display = 'block';
+    }
+
+    function showError(msg) {
+        const errorDiv = document.getElementById('errorDiv');
+        errorDiv.textContent = msg;
+        errorDiv.style.display = 'block';
+        document.getElementById('calcResults').style.display = 'none';
+    }
+
+    function resetCalculator() {
+        document.getElementById("totForm").reset();
+        document.getElementById("calcResults").style.display = 'none';
+        document.getElementById("errorDiv").style.display = 'none';
+    }
+</script>
+
+</body>
+</html>
