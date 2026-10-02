@@ -20,23 +20,23 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            padding: 40px 20px;
+            padding: clamp(16px, 3vw, 40px) clamp(10px, 2vw, 20px);
             position: relative;
         }
 
         /* ================= TOP RIGHT HAMBURGER NAVIGATION ================= */
         .nav-menu-container {
             position: fixed;
-            top: 20px;
-            right: 24px;
+            top: clamp(12px, 2vw, 20px);
+            right: clamp(12px, 2vw, 24px);
             z-index: 2000;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
 
-        /* Scaled up for tablet touch */
+        /* Responsive Hamburger Button */
         .hamburger-btn {
-            width: 48px;
-            height: 48px;
+            width: clamp(40px, 5vw, 48px);
+            height: clamp(40px, 5vw, 48px);
             background-color: #ffffff;
             border: 2px solid #000000;
             border-radius: 8px;
@@ -45,7 +45,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
             padding: 0;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
             transition: all 0.18s ease-in-out;
@@ -60,7 +60,7 @@
 
         .hamburger-btn span {
             display: block;
-            width: 24px;
+            width: clamp(20px, 2.5vw, 24px);
             height: 2.5px;
             background-color: #000000;
             border-radius: 1px;
@@ -73,13 +73,13 @@
 
         /* Transform to 'X' when open */
         .hamburger-btn.open span:nth-child(1) {
-            transform: translateY(8.5px) rotate(45deg);
+            transform: translateY(7.5px) rotate(45deg);
         }
         .hamburger-btn.open span:nth-child(2) {
             opacity: 0;
         }
         .hamburger-btn.open span:nth-child(3) {
-            transform: translateY(-8.5px) rotate(-45deg);
+            transform: translateY(-7.5px) rotate(-45deg);
         }
 
         /* Dropdown Card */
@@ -87,7 +87,7 @@
             position: absolute;
             top: calc(100% + 10px);
             right: 0;
-            width: 310px;
+            width: min(310px, 86vw);
             background: #ffffff;
             border: 2px solid #000000;
             border-radius: 10px;
@@ -119,7 +119,7 @@
         }
 
         .nav-section-label {
-            font-size: 11px;
+            font-size: 10.5px;
             font-weight: 700;
             letter-spacing: 1px;
             color: #64748b;
@@ -131,11 +131,11 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 11px 12px;
+            padding: 10px 12px;
             background-color: #ffffff;
             color: #000000;
             text-decoration: none;
-            font-size: 12.5px;
+            font-size: clamp(11.5px, 1.4vw, 12.5px);
             font-weight: 700;
             letter-spacing: 0.5px;
             text-transform: uppercase;
@@ -188,15 +188,16 @@
             }
         }
 
-        /* ================= IPAD-EXPANDED MAIN CONTAINER ================= */
+        /* ================= DYNAMIC FLUID CONTAINER ================= */
         .container {
             background-color: #ffffff;
             border: 2px solid #000000;
             border-radius: 16px;
-            padding: 40px 36px;
+            padding: clamp(24px, 4vw, 40px) clamp(18px, 3.5vw, 36px);
             width: 100%;
-            max-width: 860px; /* Matched to iPad aspect ratios */
+            max-width: min(860px, 100%);
             box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+            margin: 0 auto;
         }
 
         /* Header Banner */
@@ -204,11 +205,11 @@
             text-align: center;
             padding-bottom: 16px;
             border-bottom: 2px solid #000000;
-            margin-bottom: 30px;
+            margin-bottom: clamp(20px, 3vw, 30px);
         }
 
         h1 {
-            font-size: 32px;
+            font-size: clamp(24px, 3.6vw, 32px);
             font-weight: 800;
             letter-spacing: 1.5px;
             color: #000000;
@@ -217,31 +218,25 @@
         }
 
         .subtitle-badge {
-            font-size: 13px;
+            font-size: clamp(11.5px, 1.4vw, 13px);
             font-weight: 700;
             letter-spacing: 1.5px;
             color: #1976d2;
             text-transform: uppercase;
         }
 
-        /* Large Touch-Optimized Input Grid */
+        /* Responsive Input Grid */
         .input-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 22px;
-            margin-bottom: 22px;
+            gap: clamp(14px, 2.2vw, 22px);
+            margin-bottom: clamp(14px, 2.2vw, 22px);
         }
 
-        @media (max-width: 600px) {
+        @media (max-width: 580px) {
             .input-grid {
                 grid-template-columns: 1fr;
-                gap: 16px;
-            }
-            .container {
-                padding: 24px 20px;
-            }
-            h1 {
-                font-size: 26px;
+                gap: 14px;
             }
         }
 
@@ -251,7 +246,7 @@
         }
 
         label {
-            font-size: 13.5px;
+            font-size: clamp(12px, 1.4vw, 13.5px);
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.6px;
@@ -261,14 +256,20 @@
 
         input[type="number"], input[type="text"] {
             width: 100%;
-            padding: 14px 18px;
+            padding: clamp(10px, 1.6vw, 14px) clamp(12px, 1.8vw, 18px);
             background-color: #ffffff;
             border: 2px solid #000000;
             border-radius: 8px;
             color: #000000;
-            font-size: 22px; /* Very clear and large on iPad */
+            font-size: clamp(18px, 2.4vw, 22px);
             font-weight: 700;
             transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        input[type="number"]::placeholder, input[type="text"]::placeholder {
+            color: #9ca3af;
+            font-weight: 500;
+            font-size: clamp(15px, 2vw, 18px);
         }
 
         input[type="number"]:focus, input[type="text"]:focus {
@@ -277,15 +278,15 @@
             box-shadow: 0 0 0 4px rgba(25, 118, 210, 0.18);
         }
 
-        /* Large Action Buttons */
+        /* Action Buttons */
         .btn-compute {
             width: 100%;
-            padding: 16px 20px;
+            padding: clamp(13px, 1.8vw, 16px) 20px;
             background-color: #000000;
             color: #ffffff;
             border: 2px solid #000000;
             border-radius: 8px;
-            font-size: 15px;
+            font-size: clamp(13.5px, 1.6vw, 15px);
             font-weight: 700;
             letter-spacing: 0.8px;
             text-transform: uppercase;
@@ -309,10 +310,10 @@
             background: transparent;
             border: 2px solid #000000;
             color: #000000;
-            padding: 14px 20px;
+            padding: clamp(11px, 1.5vw, 14px) 20px;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 13.5px;
+            font-size: clamp(12px, 1.4vw, 13.5px);
             font-weight: 700;
             letter-spacing: 0.6px;
             text-transform: uppercase;
@@ -329,13 +330,13 @@
             background-color: #f8fafc;
             border: 2px solid #000000;
             border-radius: 12px;
-            padding: 28px 24px;
-            margin-top: 30px;
+            padding: clamp(20px, 3vw, 28px) clamp(16px, 2.5vw, 24px);
+            margin-top: clamp(20px, 3vw, 30px);
             display: none;
         }
 
         .results-header-tag {
-            font-size: 13px;
+            font-size: clamp(11.5px, 1.4vw, 13px);
             font-weight: 800;
             letter-spacing: 1.2px;
             color: #1976d2;
@@ -347,7 +348,7 @@
         .stat-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 16px;
+            gap: clamp(12px, 2vw, 16px);
             margin-bottom: 18px;
         }
 
@@ -361,12 +362,12 @@
             background: #ffffff;
             border: 2px solid #000000;
             border-radius: 8px;
-            padding: 16px 18px;
+            padding: clamp(12px, 2vw, 16px) clamp(14px, 2vw, 18px);
             text-align: center;
         }
 
         .stat-label {
-            font-size: 12px;
+            font-size: clamp(10.5px, 1.3vw, 12px);
             font-weight: 700;
             letter-spacing: 0.6px;
             color: #64748b;
@@ -376,7 +377,7 @@
         }
 
         .stat-value {
-            font-size: 34px;
+            font-size: clamp(26px, 4vw, 34px);
             font-weight: 800;
             color: #000000;
             letter-spacing: 0.5px;
@@ -389,8 +390,8 @@
             border-right: 1.5px solid #000000;
             border-bottom: 1.5px solid #000000;
             border-radius: 6px;
-            padding: 16px 18px;
-            font-size: 15px;
+            padding: clamp(12px, 2vw, 16px) clamp(14px, 2.2vw, 18px);
+            font-size: clamp(13px, 1.6vw, 15px);
             line-height: 1.55;
             color: #111827;
         }
@@ -406,7 +407,7 @@
             border: 2px solid #b91c1c;
             padding: 14px 18px;
             border-radius: 8px;
-            font-size: 14px;
+            font-size: clamp(12.5px, 1.5vw, 14px);
             font-weight: 700;
             text-align: center;
             margin-top: 20px;
@@ -416,11 +417,11 @@
         /* Footer */
         .footer {
             text-align: center;
-            font-size: 12px;
+            font-size: clamp(10.5px, 1.3vw, 12px);
             color: #64748b;
             font-weight: 700;
             letter-spacing: 1px;
-            margin-top: 24px;
+            margin-top: clamp(18px, 2.5vw, 24px);
             text-transform: uppercase;
         }
     </style>
@@ -464,12 +465,20 @@
             <span class="nav-arrow">&rarr;</span>
         </a>
 
+        <!-- (TF Bomb-Run Calculator omitted since user is on this tool) -->
+
         <div class="nav-divider"></div>
         <div class="nav-section-label">AUX TOOLS</div>
         
         <!-- MCSTS Playtime Calculator -->
         <a href="https://mcsts-playtime-calculator.pages.dev/" class="nav-item nav-item-aux">
             <span>MCSTS PLAYTIME CALCULATOR</span>
+            <span class="nav-arrow">&rarr;</span>
+        </a>
+
+        <!-- Instrument Approach Timer -->
+        <a href="https://approach-timer.pages.dev/" class="nav-item nav-item-aux">
+            <span>INSTRUMENT APPROACH TIMER</span>
             <span class="nav-arrow">&rarr;</span>
         </a>
     </div>
@@ -505,7 +514,7 @@
             </div>
         </div>
 
-        <div class="form-group" style="margin-bottom: 22px;">
+        <div class="form-group" style="margin-bottom: clamp(16px, 2.2vw, 22px);">
             <label for="tgtTime">Initial TOT (HH:MM:SS)</label>
             <input type="text" id="tgtTime" placeholder="Ex: 05:52:00" autocomplete="off">
         </div>
